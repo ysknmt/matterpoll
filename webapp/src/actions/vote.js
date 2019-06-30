@@ -19,17 +19,17 @@ export const websocketHasVoted = (data) => async (dispatch) => {
 };
 
 export const fetchVotedAnswers = (siteUrl, pollId) => async (dispatch) => {
-    if (typeof pollId === 'undefined' || pollId === '') {
+    if (!Boolean(pollId)) {
         return;
     }
 
     let url = siteUrl.replace(/\/?$/, '/');
     url = `${url}/plugins/${pluginId}/api/v1/polls/${pollId}/voted`;
 
-    fetch(url).then((r) => r.json()).then((r) => {
-        dispatch({
-            type: ActionTypes.FETCH_VOTED_ANSWERS,
-            data: r,
-        });
-    });
+    return (fetch(url).then((r) => r.json()).then((r) => {
+            dispatch({
+                type: ActionTypes.FETCH_VOTED_ANSWERS,
+                data: r,
+            });
+        }));
 };
